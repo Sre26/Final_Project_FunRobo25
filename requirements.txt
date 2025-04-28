@@ -4,7 +4,6 @@ cycler==0.12.1
 fonttools==4.55.8
 kiwisolver==1.4.8
 matplotlib==3.10.0
-numpy==2.2.2
 packaging==24.2
 pillow==11.1.0
 pynput==1.7.7
@@ -14,3 +13,11 @@ python-xlib==0.33
 pyYAML==6.0.2
 six==1.17.0
 tk==0.1.0
+inputs==0.5
+numpy==1.24.2
+pigpio==1.78
+pyserial==3.5
+#rpi_lgpio==0.6
+rpi_ws281x==5.0.0
+smbus2==0.4.2
+RPi.GPIO==0.7.1
