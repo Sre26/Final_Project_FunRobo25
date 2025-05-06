@@ -5,7 +5,7 @@ from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from modules.arm_models import Robot
 import math
-from helper_fcns.utils import wraptopi, EndEffector
+from modules.helper_fcns.utils import wraptopi, EndEffector
 from modules.trajectory_generator import MultiAxisTrajectoryGenerator
 import time
 from pynput import keyboard
@@ -299,7 +299,7 @@ class Visualizer:
         print('Updating waypoints...')
 
         # get pid_gains from yaml file
-        with open('waypoints.yml', 'r') as file:
+        with open('arms/waypoints.yml', 'r') as file:
             waypoints = yaml.safe_load(file)
 
         self.waypoint_idx = 0
@@ -310,54 +310,60 @@ class Visualizer:
     
     def generate_traj_task_space(self):
         """
-        Generates and visualizes a task-space trajectory using a polynomial interpolator between waypoints.
+        Generates and visualizes a task-space trajectory using a polynomial interpolator between multiple waypoints.
         """
-    
         print('Following trajectory in task space...')
-    
-        waypoints = self.robot.get_waypoints()
-        q0 = waypoints[0]
-        qf = waypoints[1]
+        
+        waypoints = self.robot.get_waypoints()  # Get all waypoints
+        num_waypoints = len(waypoints)
 
-        traj = MultiAxisTrajectoryGenerator(method="cubic", mode="task", interval=[0, 1], ndof=len(q0), start_pos=q0, final_pos=qf)
-        traj_dofs = traj.generate(nsteps=50)
+        for i in range(num_waypoints - 1):  # Iterate through consecutive waypoint pairs
+            q0 = waypoints[i]
+            qf = waypoints[i + 1]
 
-        for i in range(50):
-            pos = [dof[0][i] for dof in traj_dofs]
-            ee = EndEffector(*pos, 0, -math.pi/2, wraptopi(math.atan2(pos[1], pos[0]) + math.pi))
-            self.update_IK(ee, soln=0, numerical=True, display_traj=True)
-            time.sleep(0.05)
+            # Generate trajectory between q0 and qf
+            traj = MultiAxisTrajectoryGenerator(method="cubic", mode="task", interval=[0, 1], ndof=len(q0), start_pos=q0, final_pos=qf)
+            traj_dofs = traj.generate(nsteps=50)
+
+            # Follow the trajectory
+            for j in range(50):
+                pos = [dof[0][j] for dof in traj_dofs]
+                ee = EndEffector(*pos, 0, -math.pi/2, wraptopi(math.atan2(pos[1], pos[0]) + math.pi))
+                self.update_IK(ee, soln=0, numerical=True, display_traj=True)
+                time.sleep(0.05)
         
         traj.plot()
 
     
     def generate_traj_joint_space(self):
         """
-        Generates and visualizes a joint-space trajectory by solving inverse kinematics at waypoints
+        Generates and visualizes a joint-space trajectory by solving inverse kinematics at multiple waypoints
         and interpolating between resulting joint configurations.
         """
-
         print('Following trajectory in joint space...')
         
-        waypoints = self.robot.get_waypoints()
+        waypoints = self.robot.get_waypoints()  # Get all waypoints
+        num_waypoints = len(waypoints)
 
-        EE_0 = EndEffector(*waypoints[0], 0, 0, 0)
-        EE_f = EndEffector(*waypoints[1], 0, 0, 0)
+        for i in range(num_waypoints - 1):  # Iterate through consecutive waypoint pairs
+            EE_0 = EndEffector(*waypoints[i], 0, 0, 0)
+            EE_f = EndEffector(*waypoints[i + 1], 0, 0, 0)
 
-        q0 = np.rad2deg(self.robot.solve_inverse_kinematics(EE_0))
-        qf = np.rad2deg(self.robot.solve_inverse_kinematics(EE_f))
+            # Solve inverse kinematics for the start and end waypoints
+            q0 = np.rad2deg(self.robot.solve_inverse_kinematics(EE_0))
+            qf = np.rad2deg(self.robot.solve_inverse_kinematics(EE_f))
 
-        traj = MultiAxisTrajectoryGenerator(method="cubic", mode="joint", interval=[0, 1], ndof=len(q0), start_pos=q0, final_pos=qf)
+            # Generate trajectory between q0 and qf
+            traj = MultiAxisTrajectoryGenerator(method="cubic", mode="joint", interval=[0, 1], ndof=len(q0), start_pos=q0, final_pos=qf)
+            traj_dofs = traj.generate(nsteps=50)
 
-        traj_dofs = traj.generate(nsteps=50)
-
-        for i in range(50):
-            theta = [dof[0][i] for dof in traj_dofs]            
-            self.update_FK(theta=theta, display_traj=True) 
-            time.sleep(0.05)
+            # Follow the trajectory
+            for j in range(50):
+                theta = [dof[0][j] for dof in traj_dofs]
+                self.update_FK(theta=theta, display_traj=True)
+                time.sleep(0.05)
         
         traj.plot()
-
 
     def check_vk_status(self):
         """

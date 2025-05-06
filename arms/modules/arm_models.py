@@ -1,8 +1,8 @@
 from math import sqrt, sin, cos, atan, atan2, degrees, pi
 import numpy as np
 from matplotlib.figure import Figure
-from helper_fcns.utils import EndEffector, rotm_to_euler
-from helper_fcns.utils import dh_to_matrix
+from modules.helper_fcns.utils import EndEffector, rotm_to_euler, euler_to_rotm
+from modules.helper_fcns.utils import dh_to_matrix, check_joint_limits, near_zero, wraptopi
 
 PI = 3.1415926535897932384
 
@@ -198,10 +198,10 @@ class Robot:
 
 
     def get_waypoints(self):
-        return [
-            [self.waypoint_x[0], self.waypoint_y[0], self.waypoint_z[0]],
-            [self.waypoint_x[1], self.waypoint_y[1], self.waypoint_z[1]]
-        ]
+        """
+        Returns all waypoints as a list of [x, y, z] coordinates.
+        """
+        return [[self.waypoint_x[i], self.waypoint_y[i], self.waypoint_z[i]] for i in range(len(self.waypoint_x))]
     
 
     def plot_3D(self):
@@ -677,12 +677,7 @@ class FiveDOFRobot:
     def __init__(self):
         """Initialize the robot parameters and joint limits."""
         # Link lengths
-<<<<<<< HEAD:arm_models.py
         self.l1, self.l2, self.l3, self.l4, self.l5 = 15.5, 9.9, 9.5, 5.5, 10.5
-=======
-        # self.l1, self.l2, self.l3, self.l4, self.l5 = 0.30, 0.15, 0.18, 0.15, 0.12
-        self.l1, self.l2, self.l3, self.l4, self.l5 = 0.155, 0.099, 0.095, 0.055, 0.105 # from hardware measurements
->>>>>>> 97f447e63f48fc0e38dd975f90f5617a895ea694:modules/arm_models.py
         
         # Joint angles (initialized to zero)
         self.theta = [0, 0, 0, 0, 0]
@@ -825,20 +820,6 @@ class FiveDOFRobot:
         # Calls forward kinematics with new theta values
         self.calc_forward_kinematics(self.theta, radians=True)
 
-<<<<<<< HEAD:arm_models.py
-=======
-
-    def solve_inverse_kinematics(self, EE: EndEffector, tol=1e-3, ilimit=500):
-        """ Calculate numerical inverse kinematics based on input coordinates. """
-
-        ########################################
-
-        # insert your code here
-
-        ########################################
-
-    
->>>>>>> 97f447e63f48fc0e38dd975f90f5617a895ea694:modules/arm_models.py
     def calc_robot_points(self):
         """ Calculates the main arm points using the current joint angles """
 
