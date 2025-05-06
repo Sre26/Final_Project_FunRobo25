@@ -1,8 +1,13 @@
 from math import sqrt, sin, cos, atan, atan2, degrees, pi
 import numpy as np
 from matplotlib.figure import Figure
+<<<<<<< HEAD
 from modules.helper_fcns.utils import EndEffector, rotm_to_euler
 from modules.helper_fcns.utils import dh_to_matrix
+=======
+from modules.helper_fcns.utils import EndEffector, rotm_to_euler, euler_to_rotm
+from modules.helper_fcns.utils import dh_to_matrix, check_joint_limits, near_zero, wraptopi
+>>>>>>> d16689d20e380fdd235a8e7c026a15237e4ee5d2
 
 PI = 3.1415926535897932384
 
@@ -198,10 +203,10 @@ class Robot:
 
 
     def get_waypoints(self):
-        return [
-            [self.waypoint_x[0], self.waypoint_y[0], self.waypoint_z[0]],
-            [self.waypoint_x[1], self.waypoint_y[1], self.waypoint_z[1]]
-        ]
+        """
+        Returns all waypoints as a list of [x, y, z] coordinates.
+        """
+        return [[self.waypoint_x[i], self.waypoint_y[i], self.waypoint_z[i]] for i in range(len(self.waypoint_x))]
     
 
     def plot_3D(self):
