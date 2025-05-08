@@ -1,7 +1,7 @@
 import argparse
 import numpy as np
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, StringVar 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from modules.arm_models import Robot
 import math
@@ -159,8 +159,19 @@ class Visualizer:
         self.tg_entry_title.grid(column=0, row=row_number, columnspan=2, pady=(0, 10))
         row_number += 1
 
-        self.tg_generate_button = ttk.Button(self.control_frame, text="Upload Waypoints", command=self.update_waypoints)
-        self.tg_generate_button.grid(column=0, row=row_number, columnspan=1, pady=2)
+        #self.tg_generate_button = ttk.Button(self.control_frame, text="Upload Waypoints", command=self.update_waypoints)
+        #self.tg_generate_button.grid(column=0, row=row_number, columnspan=1, pady=2)
+
+        # Dropdown menu for selecting a shape
+        self.shape_var = StringVar()
+        self.shape_dropdown = ttk.Combobox(self.control_frame, textvariable=self.shape_var, state="readonly")
+        self.shape_dropdown['values'] = ["square", "triangle", "rectangle", "zigzag", "spiral", "pentagon"]
+        self.shape_dropdown.grid(column=0, row=row_number, columnspan=1, pady=2)
+
+        # Button to process the selected shape
+        self.tg_generate_button = ttk.Button(self.control_frame, text="Load Shape", command=self.load_selected_shape)
+        self.tg_generate_button.grid(column=1, row=row_number, columnspan=1, pady=2)
+        row_number += 1
 
         self.tg_follow_task_button = ttk.Button(self.control_frame, text="Generate (Task-space)", command=self.generate_traj_task_space)
         self.tg_follow_task_button.grid(column=1, row=row_number, columnspan=1, pady=2)
@@ -196,6 +207,8 @@ class Visualizer:
         theta = [0.0] * self.robot.num_joints
         self.robot.reset_ee_trajectory()
         self.update_FK(theta)
+        self.robot.clear_waypoints()
+        self.canvas.draw()
 
 
     def get_ee_from_input(self):
@@ -290,9 +303,10 @@ class Visualizer:
         """
         self.vk_status = False
 
-
-    def update_waypoints(self):
+       
+    def load_selected_shape(self):
         """
+        Loads the waypoints for the selected shape and outputs the points.
         Loads waypoints from a YAML file and updates the robot's internal waypoint list and plot.
         """
 
@@ -302,11 +316,27 @@ class Visualizer:
         with open('arms/waypoints.yml', 'r') as file:
             waypoints = yaml.safe_load(file)
 
-        self.waypoint_idx = 0
-        self.robot.update_waypoints(waypoints['points'])
+        selected_shape = self.shape_var.get()
+        if not selected_shape:
+            print("No shape selected.")
+            return
+        
+        print(f"Loading waypoints for shape: {selected_shape}")
+        if selected_shape == "square":
+            self.robot.update_waypoints(waypoints['square'])
+        elif selected_shape == "triangle":
+            self.robot.update_waypoints(waypoints['triangle'])
+        elif selected_shape == "rectangle":
+            self.robot.update_waypoints(waypoints['rectangle'])
+        elif selected_shape == "zigzag":
+            self.robot.update_waypoints(waypoints['zigzag'])
+        elif selected_shape == "spiral":
+            self.robot.update_waypoints(waypoints['spiral'])
+        elif selected_shape == "pentagon":
+            self.robot.update_waypoints(waypoints['pentagon'])
+
         self.robot.plot_3D()
         self.canvas.draw()
-
     
     def generate_traj_task_space(self):
         """

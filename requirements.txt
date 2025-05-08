@@ -13,6 +13,7 @@ python-xlib==0.33
 pyYAML==6.0.2
 six==1.17.0
 tk==0.1.0
+
 inputs==0.5
 numpy==1.24.2
 pigpio==1.78
