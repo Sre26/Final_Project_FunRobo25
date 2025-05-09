@@ -84,12 +84,10 @@ $ python main_arm.py --robot_type scara
 
 
 ### Generative AI Use Disclosure
-- Please make sure to briefly describe what and how generative AI tools were used in developing the contents of your work.
-- Acceptable use:
-    - To research a related topic to the subject at hand
-    - As a substitute to "Stackoverflow" guides on quick programming how-tos, etc.
-- Unacceptable use:
-    - Directly copying large swaths of code from a ChatGPT response to a prompt in part or entirely related to the assignment's problem
+We did not use generative AI for this project.
 
-For instance, I used ChatGPT in generating the docstrings for the functions in this repository.
+### Visual
+[video]
 
+### Report
+[report]
