@@ -1,11 +1,13 @@
 # Arm Drawing Robot
+The main goal of this project was to utilize the 5-DOF platform to develop a robotic drawing arm capable of tracing out given points in a plane. The robotic arm would utilize a laser pointer as its drawing tool.
+
 This repository focuses on the following:
 1. **Numerical Inverse kinematics**
 2. **Trajectory Generation**
-4. Applied to the **5-DOF Hiwonder robot** configuration
 
 This repository includes the **visualization tool (viz tool)** used for testing our kinematics modeling and analysis code.
 
+Video can be found under FunRoboDemo.mp4
 ## Viz Tool
 
 <img src = "media/FPK.png">
@@ -84,8 +86,6 @@ $ python main_arm.py --robot_type scara
 ### Generative AI Use Disclosure
 We did not use generative AI for this project.
 
-### Visual
-<video src = "FunRoboDemo.mp4">
 
 ### Report
-[report]
+[[Final Report]](https://docs.google.com/document/d/1wKqJgrLdOoBGa_jd47JHfiZ-ha7Mzm4CgiY_ALUKm9w/edit?usp=sharing)
