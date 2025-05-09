@@ -85,7 +85,7 @@ $ python main_arm.py --robot_type scara
 We did not use generative AI for this project.
 
 ### Visual
-[video]
+<video src = "FunRoboDemo.mp4">
 
 ### Report
 [report]
