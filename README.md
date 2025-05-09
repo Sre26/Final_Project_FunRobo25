@@ -1,12 +1,10 @@
-# Module 1&2: Forward and Inverse Kinematics for Robot Manipulators
+# Arm Drawing Robot
+This repository focuses on the following:
+1. **Numerical Inverse kinematics**
+2. **Trajectory Generation**
+4. Applied to the **5-DOF Hiwonder robot** configuration
 
-This repository accompanies the class activities in modules 1&2 focusing on the following:
-1. **Forward position kinematics (FPK)**
-2. **Forward velocity kinematics (FVK)**
-3. **Inverse position kinematics (IPK)**
-4. Applied on three different arm configurations: **Two-DOF arm, SCARA robot, 5-DOF Hiwonder robot**
-
-This repository provides the **visualization tool (viz tool)** for testing your kinematics modeling and analysis code.
+This repository includes the **visualization tool (viz tool)** used for testing our kinematics modeling and analysis code.
 
 ## Viz Tool
 
@@ -14,10 +12,10 @@ This repository provides the **visualization tool (viz tool)** for testing your 
 
 ## Setting up your PC
 
-- You can complete this assignment on any computer OS: Mac, Windows, Linux, etc. All you need is Python 3 interpreter (code was tested using Python 3.10).
+- This can be opened on any computer OS: Mac, Windows, Linux, etc. All you need is Python 3 interpreter (code was tested using Python 3.10).
 
 #### Step 0 (Optional): Install VScode
-- Install Visual Studio Code (I strongly recommend using this, if you don’t already do. It’s the best IDE in my humble opinion)
+- Install Visual Studio Code
 - Follow the instructions [here to install.](https://code.visualstudio.com/download)
 
 
